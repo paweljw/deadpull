@@ -5,6 +5,7 @@ require 'deadpull/values/environment'
 require 'deadpull/values/s3_client'
 require 'deadpull/values/s3_locations'
 require 'deadpull/values/s3_path'
+require 'deadpull/values/local_location'
 
 module Deadpull
   module Values; end

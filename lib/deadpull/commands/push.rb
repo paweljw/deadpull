@@ -16,6 +16,7 @@ module Deadpull
             body: File.read(current_path)
           )
         end
+        true
       end
 
       private
