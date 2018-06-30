@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler/setup'
+require 'deadpull'
+require 'optparse'
+
+options = OpenStruct.new
+options.upload = false
+
+opt_parser = OptionParser.new do |opts|
+  opts.banner = 'Usage: deadpull [options] <path>'
+
+  opts.separator ''
+  opts.separator 'Options:'
+
+  opts.on('-u', '--upload', 'Push to S3 from given path') do |v|
+    options.upload = v
+  end
+
+  opts.on('-e', '--environment [ENVIRONMENT]', 'Provides environment, superseding DEADPULL_ENV and RAILS_ENV') do |v|
+    options.environment = v
+  end
+
+  opts.on('-p', '--path [PATH]',
+          'S3 path to be used for upload or download in form of bucket-name/prefix. Supersedes config.') do |v|
+    options.path = v
+  end
+
+  opts.separator ''
+  opts.separator 'Common options:'
+
+  opts.on_tail('-h', '--help', 'Show this message') do
+    puts opts
+    exit
+  end
+end
+
+opt_parser.parse!(ARGV)
+
+local_path = ARGV.last
+
+environment = Deadpull::Values::Environment.concretize(options.environment)
+configuration = Deadpull::Configuration.new({}).call.value!
+configuration[:path] = options.path if options.path
+
+if options.upload
+  Deadpull::Commands::Push.call(local_path, configuration, environment)
+else
+  Deadpull::Commands::Pull.call(local_path, configuration, environment)
+end

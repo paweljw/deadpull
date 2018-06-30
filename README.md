@@ -45,6 +45,33 @@ When using programmatic operation, any hash passed to `Deadpull::Configuration#n
 
 Environment is decided by either passing it explicitly to commands, or by using `DEADPULL_ENV` or `RAILS_ENV`. If none of the above is provided, it defaults to `development`, following Rails convention.
 
+## CLI usage
+
+Pulling config for 'production' environment to 'tmp' example:
+
+```
+$ deadpull -e production tmp
+```
+
+Pushing config from 'tmp' to a specific path on S3 for 'staging' environment example:
+
+```
+$ deadpull -u -e staging -p my-fancy-bucket/this-project tmp
+```
+
+Note that when not given `-u` (or `--upload`), Deadpull defaults to pulling in order to prevent inadvertent damage to your configuration source-of-truth on S3.
+
+Options description (use `-h` locally to get this):
+
+```
+Usage: deadpull [options] <path>
+
+Options:
+    -u, --upload                     Push to S3 from given path
+    -e, --environment [ENVIRONMENT]  Provides environment, superseding DEADPULL_ENV and RAILS_ENV
+    -p, --path [PATH]                S3 path to be used for upload or download in form of bucket-name/prefix. Supersedes config.
+```
+
 ## Programmatic usage
 
 ### `Deadpull::Commands::Push`
