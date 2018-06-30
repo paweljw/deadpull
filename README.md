@@ -1,5 +1,9 @@
 # Deadpull
 
+[![Build Status](https://travis-ci.org/paweljw/deadpull.svg?branch=master)](https://travis-ci.org/paweljw/deadpull)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d53d13278ba762fc66dc/maintainability)](https://codeclimate.com/github/paweljw/deadpull/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/d53d13278ba762fc66dc/test_coverage)](https://codeclimate.com/github/paweljw/deadpull/test_coverage)
+
 A simple gem to organize storing and retrieving configuration files on AWS S3 in a programmatic, automated fashion.
 
 Use cases:
