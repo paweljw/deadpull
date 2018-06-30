@@ -1,5 +1,13 @@
 # Deadpull
 
+A simple gem to organize storing and retrieving configuration files on AWS S3 in a programmatic, automated fashion.
+
+Use cases:
+
+* Automatically synchronizing newest configs during a deploy
+* Bootstrapping developers' environments as part of an onboarding process
+* Personal dotfiles synchronization between machines
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -12,13 +20,62 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+If you wish to take advantage of the `deadpull` command in your project's directory, install binstubs with
+
+    $ bundle binstubs deadpull
+
+If you wish to use the provided `deadpull` command globally from the command line, install it with `gem`:
 
     $ gem install deadpull
 
-## Usage
+## Configuration
 
-TODO: Write usage instructions here
+Configuration uses two keys currently:
+
+* `path` - required. This is composed of a bucket part and then a prefix, e.g. `my-fancy-bucket/a-directory/prefix`. It relates to locations on AWS S3.
+* `aws` - optional. This is a hash containing anything [`Aws::S3::Client`](https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html) accepts in its initializer. You should set at least `profile` and `region` keys here.
+
+### Configuration file order
+
+Deadpull will first look for a file called `.deadpull.yml`. Then, data from file `.deadpull.local.yml` will be merged into this. The idea is that you use `.deadpull.yml` for your public configuration and commit this file, while the local file contains e.g. secrets and does not get commited.
+
+When using programmatic operation, any hash passed to `Deadpull::Configuration#new` will be merged into the hash resulting from the above operations, effectively giving it highest priority.
+
+### Environment
+
+Environment is decided by either passing it explicitly to commands, or by using `DEADPULL_ENV` or `RAILS_ENV`. If none of the above is provided, it defaults to `development`, following Rails convention.
+
+## Programmatic usage
+
+### `Deadpull::Commands::Push`
+
+The most complete example of local usage would be:
+
+```ruby
+configuration = Deadpull::Configuration.new({ path: ..., aws: ...}).call.value!
+environment = Deadpull::Values::Environment.concretize('test')
+
+Deadpull::Commands::Push.call('/some/local/path', configuration, environment) #=> true
+# or
+Deadpull::Commands::Push.call('/some/local/path/file.yml', configuration, environment) #=> true
+```
+
+Note that configuration and environment can be ommited if you want to use the defaults found by methods described in the Configuration section above.
+
+### `Deadpull::Commands::Pull`
+
+The most complete example of local usage would be:
+
+```ruby
+configuration = Deadpull::Configuration.new({ path: ..., aws: ...}).call.value!
+environment = Deadpull::Values::Environment.concretize('test')
+
+Deadpull::Commands::Pull.call('/some/local/path', configuration, environment) #=> true
+```
+
+Note that configuration and environment can be ommited if you want to use the defaults found by methods described in the Configuration section above.
+
+Note that `Pull` will raise an `ArgumentError` if it detects that the given `path` is a regular file.
 
 ## Development
 
@@ -29,6 +86,10 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/paweljw/deadpull. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+
+## Contributors
+
+* [@macbury](https://github.com/macbury) - collaboration on the initial idea
 
 ## License
 
