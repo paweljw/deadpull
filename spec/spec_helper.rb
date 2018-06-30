@@ -7,6 +7,8 @@ if %w[1 true].include?(ENV['CI'] || ENV['COVERAGE'])
   SimpleCov.start
 end
 
+ENV['DEADPULL_ENV'] ||= 'test'
+
 require 'deadpull'
 require 'pry'
 

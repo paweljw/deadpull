@@ -13,7 +13,7 @@ Use cases:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'deadpull', '~> 0.1'
+gem 'deadpull', '~> 0.1', group: :development
 ```
 
 And then execute:
@@ -71,6 +71,38 @@ Options:
     -e, --environment [ENVIRONMENT]  Provides environment, superseding DEADPULL_ENV and RAILS_ENV
     -p, --path [PATH]                S3 path to be used for upload or download in form of bucket-name/prefix. Supersedes config.
 ```
+
+## Capistrano
+
+The Capistrano plugin works by downloading files from S3 to a temporary directory on your machine, then uploading them
+over SSH to the target server. That way your AWS keys never leave your machine and the configuration files never hit
+a network connection unencrypted. They will be present unencrypted on your machine for the duration of the Cap task though.
+
+Add the following to your Capfile:
+
+```ruby
+require 'capistrano/deadpull'
+```
+
+Options that are configurable in deploy files:
+
+```ruby
+set :deadpull_path, 'my-fancy-bucket/some-prefix' # shouldn't be necessary if you have .deadpull.yml in your project
+set :deadpull_environment, 'production' # defaults to fetch(:stage) or the fallback flow as described above
+set :deadpull_roles, :app # defaults to :app, this you might actually need to set if you do multi-machine deploys
+```
+
+The task hooks into after `deploy:updating`, as soon as shared directories are linked, to ensure your config is in place
+for e.g. asset rebuilding, services restart etc.
+
+The structure of your prefix is rebuilt on the target machine, so if your path is `my-bucket/prefix`, environment is `staging` and
+you uploaded `config/staging.yml`- resulting in a `my-bucket/prefix/staging/config/staging.yml` structure on S3 - then your
+file will be uploaded to `config/staging.yml` with respect to release path on the server.
+
+Note that Deadpull is not concerned whether your files are linked or not; if your config includes paths that are linked,
+Deadpull will happily write to those, in effect changing the contents of your `shared` directory during every deploy. This
+is because Deadpull aims to essentialy replace linked config files - if you can refresh them on every deploy from a
+single source of truth, why not?
 
 ## Programmatic usage
 

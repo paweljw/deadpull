@@ -10,7 +10,7 @@ module Deadpull
       param :s3_prefix
 
       def concretize
-        [s3_prefix, local_path.sub(/\A#{local_root}?\//, '')].join('/')
+        [s3_prefix, RootRelativePath.concretize(local_root, local_path)].join('/')
       end
     end
   end
