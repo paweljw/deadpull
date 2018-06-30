@@ -1,0 +1,15 @@
+AllCops:
+  TargetRubyVersion: 2.5.1
+
+LineLength:
+  Max: 125
+
+StringLiterals:
+  EnforcedStyle: single_quotes
+
+Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
