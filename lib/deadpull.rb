@@ -6,9 +6,9 @@ require 'dry/initializer'
 require 'active_support/core_ext/object/blank'
 
 require 'deadpull/version'
-require 'deadpull/configuration'
 
 require 'deadpull/values'
+require 'deadpull/builders'
 require 'deadpull/commands'
 
 module Deadpull; end

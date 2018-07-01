@@ -7,7 +7,7 @@ RSpec.describe Deadpull::Commands::Push do
   let(:configuration) { { path: 'test-bucket/some-test' } }
   let(:environment) { 'test' }
 
-  subject { described_class.new(path, configuration: configuration, environment: environment) }
+  subject { described_class.new(path, configuration, environment) }
 
   let(:client) { double('client') }
   let(:bucket) { double('bucket') }

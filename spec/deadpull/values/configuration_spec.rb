@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-RSpec.describe Deadpull::Configuration do
+RSpec.describe Deadpull::Values::Configuration do
   include FakeFS::SpecHelpers
 
-  subject { described_class.new.call(inline).value! }
+  subject { described_class.concretize(inline) }
 
   describe '.call' do
     context 'with empty inline config' do
-      let(:inline) { nil }
+      let(:inline) { {} }
 
       context 'with nil inline config' do
         it { expect(subject).to eq({}) }

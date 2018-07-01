@@ -74,6 +74,11 @@ Options:
     -u, --upload                     Push to S3 from given path
     -e, --environment [ENVIRONMENT]  Provides environment, superseding DEADPULL_ENV and RAILS_ENV
     -p, --path [PATH]                S3 path to be used for upload or download in form of bucket-name/prefix. Supersedes config.
+    -a, --aws [AWS]                  AWS configuration hash in the form of a JSON string. Supersedes config.
+    -v, --[no-]verbose               Explicitly print used configuration.
+
+Common options:
+    -h, --help                       Show this message
 ```
 
 ## Capistrano
@@ -115,7 +120,7 @@ single source of truth, why not?
 The most complete example of local usage would be:
 
 ```ruby
-configuration = Deadpull::Configuration.new({ path: ..., aws: ...}).call.value!
+configuration = Deadpull::Values::Configuration.concretize({ path: ..., aws: ...})
 environment = Deadpull::Values::Environment.concretize('test')
 
 Deadpull::Commands::Push.call('/some/local/path', configuration, environment) #=> true
@@ -130,7 +135,7 @@ Note that configuration and environment can be ommited if you want to use the de
 The most complete example of local usage would be:
 
 ```ruby
-configuration = Deadpull::Configuration.new({ path: ..., aws: ...}).call.value!
+configuration = Deadpull::Values::Configuration.concretize({ path: ..., aws: ...})
 environment = Deadpull::Values::Environment.concretize('test')
 
 Deadpull::Commands::Pull.call('/some/local/path', configuration, environment) #=> true

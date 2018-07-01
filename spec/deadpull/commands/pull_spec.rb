@@ -7,7 +7,7 @@ RSpec.describe Deadpull::Commands::Pull do
   let(:configuration) { { path: 'test-bucket/some-test' } }
   let(:environment) { 'test' }
 
-  subject { described_class.new(path, configuration: configuration, environment: environment) }
+  subject { described_class.new(path, configuration, environment) }
 
   let(:object) { double(key: 'some-test/test/tmp.txt', download_file: true) }
   let(:client) { double('client') }

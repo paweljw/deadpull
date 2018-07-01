@@ -13,7 +13,7 @@ namespace :deadpull do
 
   def deadpull_config
     config = deadpull_path ? { path: deadpull_path } : {}
-    Deadpull::Configuration.new(config).call.value!
+    Deadpull::Values::Configuration.concretize(config)
   end
 
   def deadpull_roles

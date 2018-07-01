@@ -7,6 +7,7 @@ require 'optparse'
 
 options = OpenStruct.new
 options.upload = false
+options.verbose = false
 
 opt_parser = OptionParser.new do |opts|
   opts.banner = 'Usage: deadpull [options] <path>'
@@ -27,6 +28,14 @@ opt_parser = OptionParser.new do |opts|
     options.path = v
   end
 
+  opts.on('-a', '--aws [AWS]', 'AWS configuration hash in the form of a JSON string. Supersedes config.') do |v|
+    options.aws = JSON.parse(v).symbolize_keys
+  end
+
+  opts.on('-v', '--[no-]verbose', 'Explicitly print used configuration.') do |v|
+    options.verbose = v
+  end
+
   opts.separator ''
   opts.separator 'Common options:'
 
@@ -41,8 +50,13 @@ opt_parser.parse!(ARGV)
 local_path = ARGV.last
 
 environment = Deadpull::Values::Environment.concretize(options.environment)
-configuration = Deadpull::Configuration.new({}).call.value!
+configuration = Deadpull::Values::Configuration.concretize
 configuration[:path] = options.path if options.path
+configuration[:aws] = options.aws if options.aws
+
+if options.verbose
+  pp configuration
+end
 
 if options.upload
   Deadpull::Commands::Push.call(local_path, configuration, environment)

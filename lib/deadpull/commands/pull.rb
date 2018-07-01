@@ -6,8 +6,8 @@ module Deadpull
       extend Dry::Initializer
 
       param(:path, proc { |path| path.is_a?(Pathname) ? path : Pathname.new(File.expand_path(path)) })
-      option :configuration, default: proc { Configuration.new({}).call.value! }
-      option :environment, default: proc { Values::Environment.concretize }
+      param :configuration, default: proc { Values::Configuration.concretize }
+      param :environment, default: proc { Values::Environment.concretize }
 
       def call
         ensure_target_is_not_a_file

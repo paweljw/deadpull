@@ -4,7 +4,7 @@ RSpec.describe Deadpull::Values::S3Client do
   let(:config) { { aws: { region: 'fakeregion' } } }
 
   subject { described_class.concretize(config) }
-  
+
   let(:client) { double }
 
   before do

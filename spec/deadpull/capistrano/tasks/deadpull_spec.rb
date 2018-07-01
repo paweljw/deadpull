@@ -18,7 +18,7 @@ RSpec.describe 'Deadpull Cap task' do
 
   describe 'runs' do
     it do
-      expect(Deadpull::Configuration).to receive_message_chain(:new, :call, :value!).and_return({})
+      expect(Deadpull::Values::Configuration).to receive(:concretize).with({}).and_return({})
       expect(Deadpull::Commands::Pull).to receive(:call).with(instance_of(String), instance_of(Hash), 'test')
       expect(Deadpull::Values::RootRelativePath).to receive(:concretize).with('/fake_path', '/fake_path/tmp.txt')
       subject.invoke
