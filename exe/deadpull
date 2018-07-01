@@ -54,9 +54,7 @@ configuration = Deadpull::Values::Configuration.concretize
 configuration[:path] = options.path if options.path
 configuration[:aws] = options.aws if options.aws
 
-if options.verbose
-  pp configuration
-end
+pp(configuration) if options.verbose
 
 if options.upload
   Deadpull::Commands::Push.call(local_path, configuration, environment)
