@@ -25,7 +25,7 @@ module Deadpull
         @paths ||= if File.file?(path)
                      [path]
                    else
-                     Dir[path.join('**', '*')]
+                     Dir[path.join('**', '*')].select { |item| File.file?(item) }
                    end
       end
 
