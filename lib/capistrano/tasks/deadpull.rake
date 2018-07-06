@@ -26,9 +26,7 @@ namespace :deadpull do
       Deadpull::Commands::Pull.call(dir, deadpull_config, deadpull_environment)
       on roles(deadpull_roles) do
         within release_path do
-          Dir[Pathname.new(dir).join('**', '*')].each do |local_path|
-            upload! local_path, Deadpull::Values::RootRelativePath.concretize(dir, local_path)
-          end
+          upload! File.join(dir, '.'), release_path, recursive: true
         end
       end
     end
