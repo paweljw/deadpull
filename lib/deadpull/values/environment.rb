@@ -5,7 +5,7 @@ module Deadpull
     class Environment < Base
       extend Dry::Initializer
 
-      option :environment, optional: true
+      param :environment, optional: true
 
       def concretize
         environment || ENV['DEADPULL_ENV'] || ENV['RAILS_ENV'] || 'development'
