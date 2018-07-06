@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    deadpull (0.1.0)
+    deadpull (0.1.1)
       activesupport (>= 5.0)
       aws-sdk-s3 (~> 1)
       dry-initializer (~> 2.4)
