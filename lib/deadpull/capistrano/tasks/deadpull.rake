@@ -34,7 +34,7 @@ namespace :deadpull do
     end
   end
 
-  after('deploy:make_linked_dirs', 'deadpull:upload') if Rake::Task.task_defined?('deploy:make_linked_dirs')
+  after('deploy:updating', 'deadpull:upload') if Rake::Task.task_defined?('deploy:updating')
 end
 # rubocop:enable BlockLength
 
